@@ -1,7 +1,6 @@
 from .pages.basket_page import BasketPage
 from .pages.main_page import MainPage
 from .pages.login_page import LoginPage
-import pytest
 
 
 MAIN_LINK = 'http://selenium1py.pythonanywhere.com/'
@@ -21,7 +20,6 @@ def test_guest_should_see_login_link(browser):
     page.should_be_login_link()
 
 
-@pytest.mark.new
 def test_guest_cant_see_product_in_basket_opened_from_main_page(browser):
     page = MainPage(browser, MAIN_LINK)
     page.open()
