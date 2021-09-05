@@ -24,6 +24,7 @@ class TestUserAddToBasketFromProductPage:
         yield
         login_page.logout()
 
+    @pytest.mark.need_review
     def test_user_can_add_product_to_basket(self, browser):
         page = ProductPage(browser, Urls.get_product_link(Urls.PRODUCT_207))
         page.open()
@@ -40,6 +41,7 @@ class TestUserAddToBasketFromProductPage:
         page.should_not_be_success_message_after_adding_product_to_basket()
 
 
+@pytest.mark.need_review
 @pytest.mark.parametrize('link', [Urls.get_product_link(Urls.PRODUCT_207, "offer0"),
                                   Urls.get_product_link(Urls.PRODUCT_207, "offer1"),
                                   Urls.get_product_link(Urls.PRODUCT_207, "offer2"),
@@ -63,6 +65,7 @@ def test_guest_can_add_product_to_basket(browser, link):
     page.should_be_basket_price(product_price)
 
 
+@pytest.mark.need_review
 def test_guest_can_go_to_login_page_from_product_page(browser):
     page = ProductPage(browser, Urls.get_product_link(Urls.PRODUCT_95))
     page.open()
@@ -77,6 +80,7 @@ def test_guest_cant_see_success_message(browser):
     page.should_not_be_success_message_after_adding_product_to_basket()
 
 
+@pytest.mark.xfail
 def test_guest_cant_see_success_message_after_adding_product_to_basket(browser):
     page = ProductPage(browser, Urls.get_product_link(Urls.PRODUCT_207), timeout=0)
     page.open()
@@ -84,6 +88,7 @@ def test_guest_cant_see_success_message_after_adding_product_to_basket(browser):
     page.should_not_be_success_message_after_adding_product_to_basket()
 
 
+@pytest.mark.need_review
 def test_guest_cant_see_product_in_basket_opened_from_product_page(browser):
     page = ProductPage(browser, Urls.get_product_link(Urls.PRODUCT_207), timeout=0)
     page.open()
