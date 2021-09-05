@@ -11,19 +11,31 @@ class BasePage:
         self.url = url
         self.browser.implicitly_wait(timeout)
 
-    def open(self):
-        self.browser.get(self.url)
+    def click_element(self, how, what):
+        self.browser.find_element(how, what).click()
 
-    def go_to_login_page(self):
-        login_link = self.browser.find_element(*BasePageLocators.LOGIN_LINK)
-        login_link.click()
+    def get_alert(self):
+        pass
+
+    def get_element_text(self, how, what) -> str:
+        return self.browser.find_element(how, what).text
 
     def go_to_basket_page(self):
         login_link = self.browser.find_element(*BasePageLocators.BASKET_LINK)
         login_link.click()
 
-    def should_be_login_link(self):
-        assert self.is_element_present(*BasePageLocators.LOGIN_LINK), "Login link is not presented"
+    def go_to_login_page(self):
+        login_link = self.browser.find_element(*BasePageLocators.LOGIN_LINK)
+        login_link.click()
+
+    def is_disappeared(self, how, what, timeout=4):
+        try:
+            WebDriverWait(self.browser, timeout, 1, TimeoutException). \
+                until_not(EC.presence_of_element_located((how, what)))
+        except TimeoutException:
+            return False
+
+        return True
 
     def is_element_present(self, how, what):
         try:
@@ -40,23 +52,21 @@ class BasePage:
 
         return False
 
-    def is_disappeared(self, how, what, timeout=4):
-        try:
-            WebDriverWait(self.browser, timeout, 1, TimeoutException). \
-                until_not(EC.presence_of_element_located((how, what)))
-        except TimeoutException:
-            return False
+    def logout(self):
+        self.click_element(*BasePageLocators.LOGOUT_LINK)
 
-        return True
+    def open(self):
+        self.browser.get(self.url)
 
-    def get_element_text(self, how, what) -> str:
-        return self.browser.find_element(how, what).text
+    def send_keys_in_element(self, how, what, keys_to_send):
+        self.browser.find_element(how, what).send_keys(keys_to_send)
 
-    def click_element(self, how, what):
-        self.browser.find_element(how, what).click()
+    def should_be_authorized_user(self):
+        assert self.is_element_present(*BasePageLocators.USER_ICON), \
+            "User icon is not presented, probably unauthorised user"
 
-    def get_alert(self):
-        pass
+    def should_be_login_link(self):
+        assert self.is_element_present(*BasePageLocators.LOGIN_LINK), "Login link is not presented"
 
     def solve_quiz_and_get_code(self):
         alert = self.browser.switch_to.alert
