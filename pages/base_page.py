@@ -6,7 +6,7 @@ from .locators import BasePageLocators
 
 
 class BasePage:
-    def __init__(self, browser, url: str, timeout: int = 5):
+    def __init__(self, browser, url: str, timeout: int = 10):
         self.browser = browser
         self.url = url
         self.browser.implicitly_wait(timeout)
